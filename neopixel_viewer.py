@@ -1,29 +1,90 @@
 from emulator_backend import Adafruit_NeoPixel
-from neopixel_effects import NeoPixel_Effects
+import time
 
-def run():
-    pixels = Adafruit_NeoPixel(51,6,"NEO_GRB + NEO_KHZ800")
-    effects = NeoPixel_Effects(pixels)
-    pixels.begin()
-    pixels.setBrightness(100)
-    pixels.setPixelColor(2,pixels.Color(255,200,10))
-    pixels.show()
-    pixels.delay(200)
-    pixels.fill(pixels.Color(150,60,10),4,10)
-    pixels.show()
-    pixels.delay(1000)
-    pixels.clear()
-    effects.colorWipe(pixels.Color(200,12,70),50)
-    pixels.setBrightness(70)
-    pixels.clear()
-    pixels.show()
-    pixels.delay(1000)
-    for i in range(5):
-        effects.colorWipe(pixels.Color(200,0,200),10)
-        pixels.clear()
-    pixels.setBrightness(90)
-    effects.rainbow(20)
-    effects.colorWipe(pixels.Color(150,150,0),40)
-    effects.rainbowCycle(20,2)
+STRIPE_LENGTH = 8
+RING_LENGTH = 16
+LED_NUMBER = (STRIPE_LENGTH * 2) + (RING_LENGTH * 2)
+LED_BRIGHTNESS = 75
 
-run()
+DELAY = 0.05
+
+STRIPE_ONE_START = 0                                    # 0
+RING_ONE_FIRST = STRIPE_LENGTH                          # 8
+RING_ONE_START = STRIPE_LENGTH + 1                      # 9
+RING_ONE_LAST = RING_ONE_FIRST + (RING_LENGTH // 2)     # 16
+RING_TWO_FIRST = STRIPE_LENGTH + RING_LENGTH            # 24
+RING_TWO_START = STRIPE_LENGTH + RING_LENGTH + 1        # 25
+RING_TWO_LAST = RING_TWO_FIRST + (RING_LENGTH // 2)     # 32
+STRIPE_TWO_START = STRIPE_LENGTH + (RING_LENGTH * 2)    # 40
+
+
+def kspowerup(pixels):
+
+    # Stripes from bottom to top
+    for i in range(STRIPE_ONE_START, STRIPE_LENGTH, 1):
+        pixels.setPixelColor(STRIPE_ONE_START + i,pixels.Color(255, 0, 0))
+        pixels.setPixelColor(STRIPE_TWO_START + i,pixels.Color(255, 0, 0))
+        pixels.show()
+        time.sleep(DELAY)
+    # First LED in rings
+    pixels.setPixelColor(RING_ONE_FIRST,pixels.Color(0, 255, 255))
+    pixels.setPixelColor(RING_TWO_FIRST,pixels.Color(0, 255, 255))
+    pixels.show()
+    time.sleep(DELAY)
+    # Rings on both sides simultanously
+    ring_one_led = RING_ONE_START
+    ring_two_led = RING_TWO_START
+    for i in range(14, 0, -2):
+        pixels.setPixelColor((ring_one_led),pixels.Color(0, 0, 255))
+        pixels.setPixelColor((ring_one_led + i),pixels.Color(0, 0, 255))
+        pixels.setPixelColor((ring_two_led),pixels.Color(0, 0, 255))
+        pixels.setPixelColor((ring_two_led + i),pixels.Color(0, 0, 255))
+        pixels.show()
+        time.sleep(DELAY)
+        ring_one_led = ring_one_led + 1
+        ring_two_led = ring_two_led + 1
+    # Last LED in rings
+    pixels.setPixelColor(RING_ONE_LAST,pixels.Color(0, 255, 255))
+    pixels.setPixelColor(RING_TWO_LAST,pixels.Color(0, 255, 255))
+    pixels.show()
+    time.sleep(DELAY)
+
+def kspowerdown(pixels):
+
+    # Last LED in rings
+    pixels.setPixelColor(RING_ONE_LAST,pixels.Color(0, 0, 0))
+    pixels.setPixelColor(RING_TWO_LAST,pixels.Color(0, 0, 0))
+    pixels.show()
+    time.sleep(DELAY)
+    # Rings on both sides simultanously
+    ring_one_led = RING_ONE_LAST - 1
+    ring_two_led = RING_TWO_LAST - 1
+    for i in range(2, 16, 2):
+        pixels.setPixelColor((ring_one_led),pixels.Color(0, 0, 0))
+        pixels.setPixelColor((ring_one_led + i),pixels.Color(0, 0, 0))
+        pixels.setPixelColor((ring_two_led),pixels.Color(0, 0, 0))
+        pixels.setPixelColor((ring_two_led + i),pixels.Color(0, 0, 0))
+        pixels.show()
+        time.sleep(DELAY)
+        ring_one_led = ring_one_led - 1
+        ring_two_led = ring_two_led - 1
+    # First LED in rings
+    pixels.setPixelColor(RING_ONE_FIRST,pixels.Color(0, 0, 0))
+    pixels.setPixelColor(RING_TWO_FIRST,pixels.Color(0, 0, 0))
+    pixels.show()
+    time.sleep(DELAY)
+    # Stripes from top to bottom
+    for i in range(STRIPE_LENGTH -1, -1, -1):
+        pixels.setPixelColor(STRIPE_ONE_START + i,pixels.Color(0, 0, 0))
+        pixels.setPixelColor(STRIPE_TWO_START + i,pixels.Color(0, 0, 0))
+        pixels.show()
+        time.sleep(DELAY)
+    time.sleep(DELAY)
+    
+    
+pixels = Adafruit_NeoPixel(LED_NUMBER,6,"NEO_GRB + NEO_KHZ800")
+pixels.begin()
+pixels.setBrightness(LED_BRIGHTNESS)
+pixels.clear()
+kspowerup(pixels)
+kspowerdown(pixels)
