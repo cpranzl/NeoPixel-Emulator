@@ -1,4 +1,4 @@
 # NeoPixel-Emulator
-NeoPixel Emulator in Python with Pyglet
+NeoPixel Emulator Knowlwdgestone Edition in Python with Pyglet
 
-This emulator has two main ways to emulate. One is a simple NeoPixel strip with the basic setPixelColor and some simple effects, and the other is a matrix emulator. You can create large matrices that dynamically resize the window based on the size. There is also an almost one-to-one port of the Adafruit GFX library, which allows for the creation of many graphics primitives and even the drawing of monochrome bitmaps from an array. The only thing not implemented is tiling and printing of text.
+This emulator was forked from https://github.com/having11 and striped down to the single purpose of being a prototype for developing animations for a Neopixel strip consisting of two NeoPixel Sticks (8 x 5050RGB LED) and two NeoPixel Rings ( 16 x 5050 RGB LED). It simulates the powerup animation of a Knowledgde Stone from the computer game No Man's Sky. A powerdown animation is also implemented.
