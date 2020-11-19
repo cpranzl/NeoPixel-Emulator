@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from emulator_backend import Adafruit_NeoPixel
 import time
 
@@ -80,8 +82,8 @@ def kspowerdown(pixels):
         pixels.show()
         time.sleep(DELAY)
     time.sleep(DELAY)
-    
-    
+
+
 pixels = Adafruit_NeoPixel(LED_NUMBER,6,"NEO_GRB + NEO_KHZ800")
 pixels.begin()
 pixels.setBrightness(LED_BRIGHTNESS)
