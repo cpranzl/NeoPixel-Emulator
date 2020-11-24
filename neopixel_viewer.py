@@ -34,7 +34,7 @@ def kspowerup(pixels):
     # Rings on both sides simultanously
     ring_one_led = RING_ONE_START
     ring_two_led = RING_TWO_START
-    for i in range(14, 0, -2):
+    for i in range((RING_ONE_LAST - RING_ONE_FIRST), 0, -2):
         pixels.setPixelColor((ring_one_led),pixels.Color(0, 0, 255))
         pixels.setPixelColor((ring_one_led + i),pixels.Color(0, 0, 255))
         pixels.setPixelColor((ring_two_led),pixels.Color(0, 0, 255))
@@ -59,7 +59,7 @@ def kspowerdown(pixels):
     # Rings on both sides simultanously
     ring_one_led = RING_ONE_LAST - 1
     ring_two_led = RING_TWO_LAST - 1
-    for i in range(2, 16, 2):
+    for i in range(2, (RING_ONE_LAST + RING_ONE_FIRST), 2):
         pixels.setPixelColor((ring_one_led),pixels.Color(0, 0, 0))
         pixels.setPixelColor((ring_one_led + i),pixels.Color(0, 0, 0))
         pixels.setPixelColor((ring_two_led),pixels.Color(0, 0, 0))
