@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from emulator_backend import Adafruit_NeoPixel
 import time
 
